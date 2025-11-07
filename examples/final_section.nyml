@@ -1,0 +1,6 @@
+# Comments at various positions
+# Comment before key
+final_config: "This is the end"
+# Comment after key
+# Multiple comments
+# Final comment

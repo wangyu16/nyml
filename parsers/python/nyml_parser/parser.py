@@ -45,6 +45,9 @@ def parse_nyml(text: str, *, strict: bool = False) -> Dict[str, Any]:
         indent = leading_spaces(raw)
 
         if multiline is not None:
+            if raw.strip() == '':
+                multiline['raw_lines'].append('')
+                continue
             if indent <= multiline['indent']:
                 # close multiline: compute content and assign
                 # find min indent among non-blank raw_lines
@@ -65,10 +68,7 @@ def parse_nyml(text: str, *, strict: bool = False) -> Dict[str, Any]:
                 multiline = None
                 # fall through to process current line as normal
             else:
-                if raw.strip() == '':
-                    multiline['raw_lines'].append('')
-                else:
-                    multiline['raw_lines'].append(raw)
+                multiline['raw_lines'].append(raw)
                 continue
 
         # not in multiline state

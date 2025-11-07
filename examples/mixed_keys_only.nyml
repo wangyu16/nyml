@@ -1,0 +1,7 @@
+# Mixed quoted and unquoted in same object
+mixed_keys:
+  unquoted_key: "normal value"
+  "quoted:key": "special key"
+  another_normal: "back to normal"
+  "space key": "key with spaces"
+  final_key: "end of mixed section"

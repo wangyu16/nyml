@@ -1,0 +1,65 @@
+    # This is NOT a comment inside a multiline string
+    Welcome to MyApp!
+
+    This multiline message contains:
+    - Bullet points
+    - Special characters: @#$%^&*()
+    - Quotes: "Hello" and 'World'
+    - Even # symbols that look like comments
+
+    Enjoy your stay!
+
+  error_template: |
+    An error occurred: {error_message}
+
+    Please try again later or contact support at:
+    - Email: support@myapp.com
+    - Phone: 1-800-HELP-NOW
+
+# Edge cases
+edge_cases:
+  # Empty multiline
+  empty_multiline: |
+
+  # Multiline with just whitespace
+  whitespace_only: |
+    # This line has only a comment
+
+  # Quoted values with special characters
+  special_value: "Value with \"quotes\" and 'single quotes'"
+  path_value: "/usr/local/bin/myapp --config=/etc/myapp.conf"
+  url_value: "https://api.example.com/v1/users?filter=active&limit=100"
+
+  # Keys with numbers and special chars
+  "key.with.dots": "dot value"
+  "key-with-dashes": "dash value"
+  "key_with_underscores": "underscore value"
+  "123numeric_key": "numeric start"
+  "key@symbol": "at symbol"
+  "key#hash": "hash symbol"
+
+# Deep nesting test
+deep_nesting:
+  level1:
+    level2:
+      level3:
+        level4:
+          level5:
+            deepest_value: "Reached the bottom!"
+            another_deep: "Even deeper value"
+
+# Mixed quoted and unquoted in same object
+mixed_keys:
+  unquoted_key: "normal value"
+  "quoted:key": "special key"
+  another_normal: "back to normal"
+  "space key": "key with spaces"
+  final_key: "end of mixed section"
+
+# Comments at various positions
+# Comment before key
+final_config: "This is the end"
+# Comment after key
+# Multiple comments
+# Final comment</content>
+<parameter name="filePath">/workspaces/nyml/examples/comprehensive_example.nyml

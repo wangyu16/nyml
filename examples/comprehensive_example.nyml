@@ -1,0 +1,113 @@
+# Comprehensive NYML Example
+# This file demonstrates all NYML features and edge cases
+
+# Basic key-value pairs
+app_name: MyApp
+version: 1.2.3
+is_production: false
+
+# Nested configuration
+database:
+  # Database connection settings
+  host: localhost
+  port: 5432
+  name: myapp_db
+  credentials:
+    username: admin
+    password: "secret#password!@#"
+    # Empty password field
+    backup_password:
+
+# Server configuration with quoted keys
+server:
+  "host:port": "127.0.0.1:8080"
+  "api@version": "v2.1"
+  "content-type": "application/json"
+  "user agent": "MyApp/1.0"
+
+# Complex nested structure
+features:
+  authentication:
+    enabled: true
+    providers:
+      google:
+        client_id: "google-oauth-id"
+        client_secret: "google-oauth-secret"
+        scopes: |
+          email
+          profile
+      github:
+        client_id: github-oauth-id
+        client_secret: github-oauth-secret
+  caching:
+    redis:
+      host: redis-server
+      port: 6379
+      ttl: 3600
+
+# Multiline strings with various content
+messages:
+  welcome: |
+    # This is NOT a comment inside a multiline string
+    Welcome to MyApp!
+
+    This multiline message contains:
+    * Bullet points
+    * Special characters: @#$%^&*()
+    * Quotes: "Hello" and 'World'
+    * Even # symbols that look like comments
+
+    Enjoy your stay!
+
+  error_template: |
+    An error occurred: {error_message}
+
+    Please try again later or contact support at:
+    Email: support@myapp.com
+    Phone: 1-800-HELP-NOW
+
+# Edge cases
+edge_cases:
+  # Empty multiline
+  empty_multiline: |
+
+  # Multiline with just whitespace
+  whitespace_only: |
+    # This line has only a comment
+
+  # Quoted values with special characters
+  special_value: "Value with \"quotes\" and 'single quotes'"
+  path_value: "/usr/local/bin/myapp --config=/etc/myapp.conf"
+  url_value: "https://api.example.com/v1/users?filter=active&limit=100"
+
+  # Keys with numbers and special chars
+  "key.with.dots": "dot value"
+  "key-with-dashes": "dash value"
+  "key_with_underscores": "underscore value"
+  "123numeric_key": "numeric start"
+  "key@symbol": "at symbol"
+  "key#hash": "hash symbol"
+
+# Deep nesting test
+deep_nesting:
+  level1:
+    level2:
+      level3:
+        level4:
+          level5:
+            deepest_value: "Reached the bottom!"
+            another_deep: "Even deeper value"
+
+# Mixed quoted and unquoted in same object
+mixed_keys:
+  unquoted_key: "normal value"
+  "quoted:key": "special key"
+  another_normal: "back to normal"
+  "space key": "key with spaces"
+  final_key: "end of mixed section"
+
+# Comments at various positions
+# Comment before key
+final_config: "This is the end"
+# Comment after key
+# Final comment

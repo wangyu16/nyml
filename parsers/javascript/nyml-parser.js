@@ -56,6 +56,10 @@ function parseNyml(text, options = {}) {
 
   if (multiline !== null) {
     // Collecting multiline block content
+    if (raw.trim() === '') {
+      multiline.rawLines.push('');
+      continue;
+    }
     if (indent <= multiline.indent) {
       // Close multiline: compute content and assign
       // Find min indent among non-blank rawLines
@@ -78,11 +82,7 @@ function parseNyml(text, options = {}) {
       multiline = null;
       // Fall through to process current line as normal
     } else {
-      if (raw.trim() === '') {
-        multiline.rawLines.push('');
-      } else {
-        multiline.rawLines.push(raw);
-      }
+      multiline.rawLines.push(raw);
       continue;
     }
   }    // Not in multiline state

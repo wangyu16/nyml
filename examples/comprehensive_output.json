@@ -1,0 +1,83 @@
+{
+  "app_name": "MyApp",
+  "version": "1.2.3",
+  "is_production": "false",
+  "database": {
+    "host": "localhost",
+    "port": "5432",
+    "name": "myapp_db",
+    "credentials": {
+      "username": "admin",
+      "password": "secret#password!@#",
+      "backup_password": {}
+    }
+  },
+  "server": {
+    "host:port": "127.0.0.1:8080",
+    "api@version": "v2.1",
+    "content-type": "application/json",
+    "user agent": "MyApp/1.0"
+  },
+  "features": {
+    "authentication": {
+      "enabled": "true",
+      "providers": {
+        "google": {
+          "client_id": "google-oauth-id",
+          "client_secret": "google-oauth-secret",
+          "scopes": "email\nprofile\n"
+        },
+        "github": {
+          "client_id": "github-oauth-id",
+          "client_secret": "github-oauth-secret"
+        }
+      }
+    },
+    "caching": {
+      "redis": {
+        "host": "redis-server",
+        "port": "6379",
+        "ttl": "3600"
+      }
+    }
+  },
+  "messages": {
+    "welcome": "# This is NOT a comment inside a multiline string\nWelcome to MyApp!\n\nThis multiline message contains:\n* Bullet points\n* Special characters: @#$%^&*()\n* Quotes: \"Hello\" and 'World'\n* Even # symbols that look like comments\n\nEnjoy your stay!\n\n",
+    "error_template": "An error occurred: {error_message}\n\nPlease try again later or contact support at:\nEmail: support@myapp.com\nPhone: 1-800-HELP-NOW\n\n"
+  },
+  "edge_cases": {
+    "empty_multiline": "\n",
+    "whitespace_only": "# This line has only a comment\n\n",
+    "special_value": "\"Value with \\\"quotes\\\" and 'single quotes'\"",
+    "path_value": "/usr/local/bin/myapp --config=/etc/myapp.conf",
+    "url_value": "https://api.example.com/v1/users?filter=active&limit=100",
+    "key.with.dots": "dot value",
+    "key-with-dashes": "dash value",
+    "key_with_underscores": "underscore value",
+    "123numeric_key": "numeric start",
+    "key@symbol": "at symbol",
+    "key#hash": "hash symbol"
+  },
+  "deep_nesting": {
+    "level1": {
+      "level2": {
+        "level3": {
+          "level4": {
+            "level5": {
+              "deepest_value": "Reached the bottom!",
+              "another_deep": "Even deeper value"
+            }
+          }
+        }
+      }
+    }
+  },
+  "mixed_keys": {
+    "unquoted_key": "normal value",
+    "quoted:key": "special key",
+    "another_normal": "back to normal",
+    "space key": "key with spaces",
+    "final_key": "end of mixed section"
+  },
+  "final_config": "This is the end"
+}

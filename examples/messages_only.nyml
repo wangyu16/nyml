@@ -1,0 +1,13 @@
+# Multiline strings with various content
+messages:
+  welcome: |
+    # This is NOT a comment inside a multiline string
+    Welcome to MyApp!
+
+    This multiline message contains:
+    - Bullet points
+    - Special characters: @#$%^&*()
+    - Quotes: "Hello" and 'World'
+    - Even # symbols that look like comments
+
+    Enjoy your stay!

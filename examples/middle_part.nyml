@@ -1,0 +1,26 @@
+    - Bullet points
+    - Special characters: @#$%^&*()
+    - Quotes: "Hello" and 'World'
+    - Even # symbols that look like comments
+
+    Enjoy your stay!
+
+  error_template: |
+    An error occurred: {error_message}
+
+    Please try again later or contact support at:
+    - Email: support@myapp.com
+    - Phone: 1-800-HELP-NOW
+
+# Edge cases
+edge_cases:
+  # Empty multiline
+  empty_multiline: |
+
+  # Multiline with just whitespace
+  whitespace_only: |
+    # This line has only a comment
+
+  # Quoted values with special characters
+  special_value: "Value with \"quotes\" and 'single quotes'"
+  path_value: "/usr/local/bin/myapp --config=/etc/myapp.conf"

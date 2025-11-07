@@ -1,0 +1,50 @@
+# Comprehensive NYML Example
+# This file demonstrates all NYML features and edge cases
+
+# Basic key-value pairs
+app_name: MyApp
+version: 1.2.3
+is_production: false
+
+# Nested configuration
+database:
+  # Database connection settings
+  host: localhost
+  port: 5432
+  name: myapp_db
+  credentials:
+    username: admin
+    password: "secret#password!@#"
+    # Empty password field
+    backup_password:
+
+# Server configuration with quoted keys
+server:
+  "host:port": "127.0.0.1:8080"
+  "api@version": "v2.1"
+  "content-type": "application/json"
+  "user agent": "MyApp/1.0"
+
+# Complex nested structure
+features:
+  authentication:
+    enabled: true
+    providers:
+      google:
+        client_id: "google-oauth-id"
+        client_secret: "google-oauth-secret"
+        scopes: |
+          email
+          profile
+      github:
+        client_id: github-oauth-id
+        client_secret: github-oauth-secret
+  caching:
+    redis:
+      host: redis-server
+      port: 6379
+      ttl: 3600
+
+# Multiline strings with various content
+messages:
+  welcome: |
