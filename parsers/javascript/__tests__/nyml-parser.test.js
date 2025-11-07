@@ -99,19 +99,19 @@ logging:
   test('missing colon error', () => {
     const text = 'key value';
     expect(() => parseNyml(text)).toThrow(ParseError);
-    expect(() => parseNyml(text)).toThrow('MISSING_COLON');
+    expect(() => parseNyml(text)).toThrow('Missing colon in key-value pair');
   });
 
   test('unmatched quote error', () => {
     const text = '"key: value';
     expect(() => parseNyml(text)).toThrow(ParseError);
-    expect(() => parseNyml(text)).toThrow('UNMATCHED_QUOTE');
+    expect(() => parseNyml(text)).toThrow('Unmatched quote in key');
   });
 
-  test('unterminated multiline error', () => {
+  test('unterminated multiline closes at EOF', () => {
     const text = `key: |
   content`;
-    expect(() => parseNyml(text)).toThrow(ParseError);
-    expect(() => parseNyml(text)).toThrow('UNTERMINATED_MULTILINE');
+    const result = parseNyml(text);
+    expect(result).toEqual({ key: 'content\n' });
   });
 });

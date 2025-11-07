@@ -122,9 +122,8 @@ def test_unmatched_quote():
 
 
 def test_unterminated_multiline():
-    """Test error for unterminated multiline block."""
+    """Test unterminated multiline block closes at EOF."""
     text = """key: |
   content"""
-    with pytest.raises(ParseError) as exc_info:
-        parse_nyml(text)
-    assert exc_info.value.code == 'UNTERMINATED_MULTILINE'
+    result = parse_nyml(text)
+    assert result == {'key': 'content\n'}

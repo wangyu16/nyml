@@ -54,41 +54,38 @@ function parseNyml(text, options = {}) {
     const raw = lines[i];
     const indent = leadingSpaces(raw);
 
-    if (multiline !== null) {
-      // Collecting multiline block content
+  if (multiline !== null) {
+    // Collecting multiline block content
+    if (indent <= multiline.indent) {
+      // Close multiline: compute content and assign
+      // Find min indent among non-blank rawLines
+      const nonblank = multiline.rawLines.filter(r => r.trim() !== '');
+      let minIndent = 0;
+      if (nonblank.length > 0) {
+        minIndent = Math.min(...nonblank.map(r => leadingSpaces(r)));
+      }
+      const pieces = [];
+      for (const r of multiline.rawLines) {
+        if (r.trim() === '') {
+          pieces.push('');
+        } else {
+          pieces.push(r.slice(minIndent));
+        }
+      }
+      const content = pieces.join('\n') + '\n';
+      const parent = stack[stack.length - 1][0];
+      parent[multiline.key] = content;
+      multiline = null;
+      // Fall through to process current line as normal
+    } else {
       if (raw.trim() === '') {
         multiline.rawLines.push('');
-        continue;
-      }
-      if (indent > multiline.indent) {
-        // Store the raw line (we will dedent later)
-        multiline.rawLines.push(raw);
-        continue;
       } else {
-        // Close multiline: compute content and assign
-        // Find min indent among non-blank rawLines
-        const nonblank = multiline.rawLines.filter(r => r.trim() !== '');
-        let minIndent = 0;
-        if (nonblank.length > 0) {
-          minIndent = Math.min(...nonblank.map(r => leadingSpaces(r)));
-        }
-        const pieces = [];
-        for (const r of multiline.rawLines) {
-          if (r.trim() === '') {
-            pieces.push('');
-          } else {
-            pieces.push(r.slice(minIndent));
-          }
-        }
-        const content = pieces.join('\n') + '\n';
-        const parent = stack[stack.length - 1][0];
-        parent[multiline.key] = content;
-        multiline = null;
-        // Fall through to process current line as normal
+        multiline.rawLines.push(raw);
       }
+      continue;
     }
-
-    // Not in multiline state
+  }    // Not in multiline state
     if (raw.trim() === '') {
       continue;
     }
@@ -106,46 +103,42 @@ function parseNyml(text, options = {}) {
     // Parse key (handle quoted keys)
     let key, valuePart;
     if (stripped.startsWith('"')) {
-      // Parse quoted key with simple escaping
-      let j = 1;
-      const keyChars = [];
-      while (j < stripped.length) {
-        const ch = stripped[j];
-        if (ch === '\\' && j + 1 < stripped.length) {
-          keyChars.push(stripped[j + 1]);
-          j += 2;
-          continue;
-        }
-        if (ch === '"') {
-          j += 1;
-          break;
-        }
-        keyChars.push(ch);
-        j += 1;
-      }
-      if (j >= stripped.length) {
+      const end = stripped.indexOf('"', 1);
+      if (end === -1) {
         throw new ParseError('UNMATCHED_QUOTE', 'Unmatched quote in key', i + 1);
       }
-      key = keyChars.join('');
-      // Now expect ':' after optional spaces
-      const rest = stripped.slice(j).trimStart();
+      key = stripped.slice(1, end);
+      const rest = stripped.slice(end + 1).trimStart();
       if (!rest.startsWith(':')) {
         throw new ParseError('MISSING_COLON', 'Missing colon after quoted key', i + 1);
       }
       valuePart = rest.slice(1).trim();
+      // Unquote if quoted
+      if (valuePart.startsWith('"') && valuePart.endsWith('"') && (valuePart.match(/"/g) || []).length === 2) {
+        valuePart = valuePart.slice(1, -1);
+      }
     } else {
       const idx = raw.indexOf(':');
       if (idx === -1) {
         throw new ParseError('MISSING_COLON', 'Missing colon in key-value pair', i + 1);
       }
-      key = raw.slice(0, idx).trimEnd();
+      key = raw.slice(0, idx).trim();
       valuePart = raw.slice(idx + 1).trim();
+      // Unquote if quoted
+      if (valuePart.startsWith('"') && valuePart.endsWith('"') && (valuePart.match(/"/g) || []).length === 2) {
+        valuePart = valuePart.slice(1, -1);
+      }
     }
 
     if (valuePart === '|') {
       // Start multiline collection
       multiline = { key, indent, rawLines: [] };
       continue;
+    }
+
+    // Unquote if quoted
+    if (valuePart.startsWith('"') && valuePart.endsWith('"') && (valuePart.match(/"/g) || []).length === 2) {
+      valuePart = valuePart.slice(1, -1);
     }
 
     // If valuePart is empty, it might be an object if following lines are more-indented
@@ -160,7 +153,24 @@ function parseNyml(text, options = {}) {
   }
 
   if (multiline !== null) {
-    throw new ParseError('UNTERMINATED_MULTILINE', 'Unterminated multiline block', lines.length);
+    // Close multiline at EOF
+    const nonblank = multiline.rawLines.filter(r => r.trim() !== '');
+    let minIndent = 0;
+    if (nonblank.length > 0) {
+      minIndent = Math.min(...nonblank.map(r => leadingSpaces(r)));
+    }
+    const pieces = [];
+    for (const r of multiline.rawLines) {
+      if (r.trim() === '') {
+        pieces.push('');
+      } else {
+        pieces.push(r.slice(minIndent));
+      }
+    }
+    const content = pieces.join('\n') + '\n';
+    const parent = stack[stack.length - 1][0];
+    parent[multiline.key] = content;
+    multiline = null;
   }
 
   return root;

@@ -51,7 +51,7 @@ npm install
 ### Usage
 
 ```javascript
-const { parseNyml } = require('./nyml-parser');
+const { parseNyml } = require("./nyml-parser");
 
 const text = `
 key: value
@@ -60,7 +60,7 @@ nested:
 `;
 
 const result = parseNyml(text);
-console.log(result);  // { key: 'value', nested: { child: 'data' } }
+console.log(result); // { key: 'value', nested: { child: 'data' } }
 ```
 
 ### Testing

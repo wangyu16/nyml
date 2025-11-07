@@ -1,8 +1,8 @@
-# Config Format Specification
+# Not YAML
 
 ---
 
-The basic idea is to define a simple, human-readable key-value format, similar to yaml but even simpler.
+The basic idea of NYML is to define a simple, human-readable key-value format, similar to yaml but even simpler.
 
 - Use indent to show parent/child relationships.
 - Everything after the key is considered the value, unless it's a multiline string.
@@ -97,9 +97,9 @@ This is parsed as:
 This rule is for storing large blocks of text, like markdown or code.
 
 - **Trigger:** The line must be `key: |`.
-- **Value Content:** The value begins on the *next line*. Every subsequent line is part of the string **as long as it is indented more** than the `key: |` line.
+- **Value Content:** The value begins on the _next line_. Every subsequent line is part of the string **as long as it is indented more** than the `key: |` line.
 - **Termination:** The block **stops** on the very first line encountered with indentation **less than or equal to** the `key: |` line.
-- **Dedent (Trimming):** The parser finds the indentation of the *first* line of content (e.g., 2 spaces) and strips that exact amount from *every* line in the block. If a line has more indentation, the extra spaces are kept.
+- **Dedent (Trimming):** The parser finds the indentation of the _first_ line of content (e.g., 2 spaces) and strips that exact amount from _every_ line in the block. If a line has more indentation, the extra spaces are kept.
 
 ---
 
@@ -119,7 +119,7 @@ server:
   # Host and port (this is a comment)
   host: localhost
   port: 8080
-  
+
   # The value here includes the hash
   status_message: "OK # (production)"
 
@@ -132,14 +132,14 @@ server:
 welcome_message: |
   # This is NOT a comment.
   # It is the first line of the string.
-  
+
   This is the main welcome message.
-  
+
   Please see the following:
     * List item 1
     * List item 2
       * A nested item
-  
+
   A line with a # is just text.
 
 # This comment is outside the block.

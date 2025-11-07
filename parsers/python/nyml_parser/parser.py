@@ -45,15 +45,7 @@ def parse_nyml(text: str, *, strict: bool = False) -> Dict[str, Any]:
         indent = leading_spaces(raw)
 
         if multiline is not None:
-            # We are collecting multiline block content.
-            if raw.strip() == '':
-                multiline['raw_lines'].append('')
-                continue
-            if indent > multiline['indent']:
-                # store the raw line (we will dedent later)
-                multiline['raw_lines'].append(raw)
-                continue
-            else:
+            if indent <= multiline['indent']:
                 # close multiline: compute content and assign
                 # find min indent among non-blank raw_lines
                 nonblank = [r for r in multiline['raw_lines'] if r.strip() != '']
@@ -72,6 +64,12 @@ def parse_nyml(text: str, *, strict: bool = False) -> Dict[str, Any]:
                 parent[multiline['key']] = content
                 multiline = None
                 # fall through to process current line as normal
+            else:
+                if raw.strip() == '':
+                    multiline['raw_lines'].append('')
+                else:
+                    multiline['raw_lines'].append(raw)
+                continue
 
         # not in multiline state
         if raw.strip() == '':
@@ -87,50 +85,61 @@ def parse_nyml(text: str, *, strict: bool = False) -> Dict[str, Any]:
 
         # parse key (handle quoted keys)
         if stripped.startswith('"'):
-            # parse quoted key with simple escaping
-            j = 1
-            key_chars = []
-            while j < len(stripped):
-                ch = stripped[j]
-                if ch == '\\' and j + 1 < len(stripped):
-                    key_chars.append(stripped[j+1])
-                    j += 2
-                    continue
-                if ch == '"':
-                    j += 1
-                    break
-                key_chars.append(ch)
-                j += 1
-            else:
+            end = stripped.find('"', 1)
+            if end == -1:
                 raise ParseError('UNMATCHED_QUOTE', 'Unmatched quote in key', line=i)
-            key = ''.join(key_chars)
-            # now expect ':' after optional spaces
-            rest = stripped[j:].lstrip()
+            key = stripped[1:end]
+            rest = stripped[end+1:].lstrip()
             if not rest.startswith(':'):
                 raise ParseError('MISSING_COLON', 'Missing colon after quoted key', line=i)
             value_part = rest[1:].strip()
+            # Unquote if quoted
+            if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
+                value_part = value_part[1:-1]
         else:
             idx = raw.find(':')
             if idx == -1:
                 raise ParseError('MISSING_COLON', 'Missing colon in key-value pair', line=i)
-            key = raw[:idx].rstrip()
+            key = raw[:idx].strip()
             value_part = raw[idx+1:].strip()
+            # Unquote if quoted
+            if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
+                value_part = value_part[1:-1]
 
-        if value_part == '|':
-            # start multiline collection
-            multiline = {'key': key, 'indent': indent, 'raw_lines': []}
-            continue
+            if value_part == '|':
+                # start multiline collection
+                multiline = {'key': key, 'indent': indent, 'raw_lines': []}
+                continue
 
-        # If value_part is empty, it might be an object if following lines are more-indented.
-        if value_part == '':
-            # create nested object and push with its indent (child lines must be more indented)
-            obj = {}
-            parent[key] = obj
-            stack.append((obj, indent + 1))
-        else:
-            parent[key] = value_part
+            # Unquote if quoted
+            if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
+                value_part = value_part[1:-1]
+
+            # If value_part is empty, it might be an object if following lines are more-indented.
+            if value_part == '':
+                # create nested object and push with its indent (child lines must be more indented)
+                obj = {}
+                parent[key] = obj
+                stack.append((obj, indent + 1))
+            else:
+                parent[key] = value_part
 
     if multiline is not None:
-        raise ParseError('UNTERMINATED_MULTILINE', 'Unterminated multiline block', line=len(lines))
+        # close multiline at EOF
+        nonblank = [r for r in multiline['raw_lines'] if r.strip() != '']
+        if nonblank:
+            min_indent = min(leading_spaces(r) for r in nonblank)
+        else:
+            min_indent = 0
+        pieces = []
+        for r in multiline['raw_lines']:
+            if r.strip() == '':
+                pieces.append('')
+            else:
+                pieces.append(r[min_indent:])
+        content = '\n'.join(pieces) + '\n'
+        parent = stack[-1][0]
+        parent[multiline['key']] = content
+        multiline = None
 
     return root
