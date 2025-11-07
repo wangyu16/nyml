@@ -96,6 +96,20 @@ def parse_nyml(text: str, *, strict: bool = False) -> Dict[str, Any]:
             # Unquote if quoted
             if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
                 value_part = value_part[1:-1]
+            
+            if value_part == '|':
+                # start multiline collection
+                multiline = {'key': key, 'indent': indent, 'raw_lines': []}
+                continue
+            
+            # If value_part is empty, it might be an object if following lines are more-indented.
+            if value_part == '':
+                # create nested object and push with its indent (child lines must be more indented)
+                obj = {}
+                parent[key] = obj
+                stack.append((obj, indent + 1))
+            else:
+                parent[key] = value_part
         else:
             idx = raw.find(':')
             if idx == -1:
