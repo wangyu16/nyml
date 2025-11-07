@@ -209,3 +209,23 @@ When parsed back to JSON:
 
 - **NYML to JSON**: `parsers/python/nyml_parser/parser.py` and `parsers/javascript/nyml-parser.js`
 - **JSON to NYML**: `examples/convert_json_to_nyml.py` and `examples/convert_json_to_nyml.js`
+
+### Other Conversion Issues
+
+**Type Loss:** NYML treats all values as strings. JSON types are converted to their string representations:
+
+- Numbers: `42` → `"42"`
+- Booleans: `true` → `"true"` (or `"True"` in Python)
+- Null: `null` → `"null"` (or `"None"` in Python)
+
+**Comment Loss:** NYML comments are not preserved when converting to JSON.
+
+**Special Characters in Strings:** Strings containing newlines (`\n`) or tabs (`\t`) are converted to multiline format in NYML.
+
+**Unicode Handling:** Unicode characters are preserved but may be escaped in JSON output.
+
+**Empty Values:** Empty objects work correctly, but empty arrays become empty multiline strings.
+
+**Key Ordering:** Object key insertion order is preserved during conversion.
+
+**Large Numbers:** Precision is maintained as strings, avoiding floating-point issues.
