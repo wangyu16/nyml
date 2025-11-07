@@ -1,0 +1,16 @@
+{
+  "name": "nyml-parser",
+  "version": "0.1.0",
+  "description": "A simple parser for NYML configuration format",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "echo 'No build step required'"
+  },
+  "keywords": ["parser", "config", "nyml"],
+  "author": "NYML Team",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
