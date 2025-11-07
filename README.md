@@ -167,3 +167,45 @@ logging:
   }
 }
 ```
+
+---
+
+## 4. JSON Conversion Notes
+
+### Array Handling
+
+NYML does not have native support for arrays. When converting JSON to NYML:
+
+- **JSON arrays** are converted to **multiline strings** (one item per line)
+- **Roundtrip conversion** (JSON → NYML → JSON) will convert arrays to multiline strings
+- This is by design - NYML prioritizes human readability over complex data structures
+
+**Example:**
+
+```json
+{
+  "items": ["item1", "item2", "item3"]
+}
+```
+
+Converts to:
+
+```nyml
+items: |
+  item1
+  item2
+  item3
+```
+
+When parsed back to JSON:
+
+```json
+{
+  "items": "item1\nitem2\nitem3\n"
+}
+```
+
+### Available Converters
+
+- **NYML to JSON**: `parsers/python/nyml_parser/parser.py` and `parsers/javascript/nyml-parser.js`
+- **JSON to NYML**: `examples/convert_json_to_nyml.py` and `examples/convert_json_to_nyml.js`
