@@ -172,6 +172,8 @@ logging:
 
 ## 4. JSON Conversion Notes
 
+NYML is designed on purpose to make human reading and editing very simple and is able to convert into JSON and back easily. However, not all features of JSON are supported. One important aspect is that only string type values are allowed, and array, number, boolean, and null types are not supported. But within the design scope, NYML and JSON can be converted perfectly from one to the other.
+
 ### Array Handling
 
 NYML does not have native support for arrays. When converting JSON to NYML:
