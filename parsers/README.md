@@ -29,45 +29,25 @@ result = parse_nyml(text)
 print(result)  # {'key': 'value', 'nested': {'child': 'data'}}
 ```
 
-### Testing
+### Converting JSON to NYML
 
-```bash
-cd parsers/python
-source venv/bin/activate
-pytest
+```python
+# Python
+from convert_json_to_nyml import json_to_nyml
+import json
+
+data = {"key": "value", "nested": {"child": "data"}}
+lines = json_to_nyml(data)
+print('\n'.join(lines))
 ```
-
-## JavaScript Parser
-
-Located in `parsers/javascript/`.
-
-### Installation
-
-```bash
-cd parsers/javascript
-npm install
-```
-
-### Usage
 
 ```javascript
-const { parseNyml } = require("./nyml-parser");
+// JavaScript
+const { jsonToNyml } = require("./convert_json_to_nyml");
 
-const text = `
-key: value
-nested:
-  child: data
-`;
-
-const result = parseNyml(text);
-console.log(result); // { key: 'value', nested: { child: 'data' } }
-```
-
-### Testing
-
-```bash
-cd parsers/javascript
-npm test
+const data = { key: "value", nested: { child: "data" } };
+const lines = jsonToNyml(data);
+console.log(lines.join("\n"));
 ```
 
 ## Development Notes
@@ -76,3 +56,5 @@ npm test
 - All values are parsed as strings
 - Indentation uses spaces (tabs not allowed)
 - Supports nested objects, comments, quoted keys, and multiline strings
+- Arrays in JSON are converted to multiline strings in NYML
+- Multiline strings in JSON are converted back to `|` syntax in NYML
