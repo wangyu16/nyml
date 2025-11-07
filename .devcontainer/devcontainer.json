@@ -1,0 +1,26 @@
+{
+  "name": "NYML Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "eg2.vscode-npm-script"
+      ]
+    }
+  },
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true
+  },
+  "forwardPorts": [],
+  "postCreateCommand": "bash .devcontainer/post-create.sh || true",
+  "remoteUser": "vscode"
+}
