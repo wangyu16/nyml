@@ -16,7 +16,7 @@ pip install -e .
 
 ### Usage
 
-```python
+````python
 from nyml_parser import parse_nyml
 
 text = """
@@ -27,7 +27,31 @@ nested:
 
 result = parse_nyml(text)
 print(result)  # {'key': 'value', 'nested': {'child': 'data'}}
-```
+
+### Preserving Order and Duplicates (New)
+
+You can parse NYML into an ordered entries representation that preserves duplicate keys and the source order:
+
+```python
+from nyml_parser import parse_nyml, to_mapping
+
+text = """
+a: 1
+b: 2
+a: 3
+"""
+# return ordered entries (document form)
+doc = parse_nyml(text, as_entries=True)
+print(doc['entries'])
+
+# convert to mapping with a strategy (last/first/all)
+map_last = to_mapping(doc, strategy='last')
+map_all = to_mapping(doc, strategy='all')
+print(map_last)  # {'a': '3', 'b': '2'}
+print(map_all)   # {'a': ['1','3'], 'b': ['2']}
+````
+
+````
 
 ### Converting JSON to NYML
 
@@ -39,7 +63,7 @@ import json
 data = {"key": "value", "nested": {"child": "data"}}
 lines = json_to_nyml(data)
 print('\n'.join(lines))
-```
+````
 
 ```javascript
 // JavaScript

@@ -2,6 +2,6 @@
 
 __version__ = "0.1.0"
 
-from .parser import parse_nyml, ParseError
+from .parser import parse_nyml, ParseError, to_mapping, get_all, get_first, get_last
 
-__all__ = ["parse_nyml", "ParseError"]
+__all__ = ["parse_nyml", "ParseError", "to_mapping", "get_all", "get_first", "get_last"]

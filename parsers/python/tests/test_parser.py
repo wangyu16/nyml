@@ -127,3 +127,25 @@ def test_unterminated_multiline():
   content"""
     result = parse_nyml(text)
     assert result == {'key': 'content\n'}
+
+
+def test_entries_and_duplicates():
+    """Test that parse_nyml(as_entries=True) preserves order and duplicates."""
+    text = "a: 1\nb: 2\na: 3\n"
+    doc = parse_nyml(text, as_entries=True)
+    assert isinstance(doc, dict)
+    entries = doc['entries']
+    assert len(entries) == 3
+    assert entries[0]['key'] == 'a' and entries[0]['value'] == '1'
+    assert entries[1]['key'] == 'b' and entries[1]['value'] == '2'
+    assert entries[2]['key'] == 'a' and entries[2]['value'] == '3'
+
+
+def test_to_mapping_all_and_last():
+    text = "a: 1\na: 2\nb: 3\n"
+    doc = parse_nyml(text, as_entries=True)
+    from nyml_parser import to_mapping
+    last_map = to_mapping(doc, strategy='last')
+    assert last_map['a'] == '2'
+    all_map = to_mapping(doc, strategy='all')
+    assert all_map['a'] == ['1', '2']
