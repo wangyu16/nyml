@@ -1,4 +1,6 @@
 const { parseNyml, ParseError, toMapping } = require('../nyml-parser');
+const { execSync } = require('child_process');
+const path = require('path');
 
 describe('NYML Parser', () => {
   test('basic key-value parsing', () => {
@@ -136,5 +138,14 @@ logging:
     const allMap = toMapping(doc, 'all');
     expect(Array.isArray(allMap.a)).toBe(true);
     expect(allMap.a).toEqual(['1', '2']);
+  });
+
+  test('cli node entries and mapping', () => {
+    const file = path.join(__dirname, '..', '..', '..', 'examples', 'comprehensive_example.nyml');
+    const cli = path.join(__dirname, '..', '..', '..', 'examples', 'nyml-cli.js');
+    const outEntries = JSON.parse(execSync(`node ${cli} --entries ${file}`));
+    expect(outEntries).toHaveProperty('type', 'document');
+    const outMap = JSON.parse(execSync(`node ${cli} --strategy=all ${file}`));
+    expect(outMap).toHaveProperty('app_name');
   });
 });
