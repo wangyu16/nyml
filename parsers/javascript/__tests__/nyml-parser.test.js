@@ -27,7 +27,7 @@ key: value
   test('quoted keys with special characters', () => {
     const text = '"http://example.com": "URL"';
     const result = parseNyml(text);
-    expect(result).toEqual({ 'http://example.com': 'URL' });
+    expect(result).toEqual({ 'http://example.com': '"URL"' });
   });
 
   test('multiline string parsing', () => {
@@ -81,15 +81,15 @@ logging:
 
     const result = parseNyml(text);
     const expected = {
-      app_name: 'My App',
+      app_name: '"My App"',
       version: '1.2',
       server: {
         host: 'localhost',
         port: '8080',
-        status_message: 'OK # (production)'
+        status_message: '"OK # (production)"'
       },
-      'http:routes': '/api/v1',
-      'user:admin': 'admin-user',
+      'http:routes': '"/api/v1"',
+      'user:admin': '"admin-user"',
       welcome_message: '# This is NOT a comment.\n# It is the first line of the string.\n\nThis is the main welcome message.\n\nPlease see the following:\n  * List item 1\n  * List item 2\n    * A nested item\n\nA line with a # is just text.\n',
       logging: {
         level: 'info'

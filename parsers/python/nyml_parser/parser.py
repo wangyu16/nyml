@@ -131,9 +131,7 @@ def parse_nyml(text: str, *, strict: bool = False, as_entries: bool = False) -> 
             if not rest.startswith(':'):
                 raise ParseError('MISSING_COLON', 'Missing colon after quoted key', line=i)
             value_part = rest[1:].strip()
-            # Unquote if quoted
-            if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
-                value_part = value_part[1:-1]
+            # Keep value as-is (do not strip surrounding quotes) - preserve original quoted values
             
             entry = NYMLEntry(key=key, quoted_key=True, line=i, indent=indent, raw=raw)
             parent_entries.append(entry)
@@ -155,9 +153,7 @@ def parse_nyml(text: str, *, strict: bool = False, as_entries: bool = False) -> 
                 raise ParseError('MISSING_COLON', 'Missing colon in key-value pair', line=i)
             key = raw[:idx].strip()
             value_part = raw[idx+1:].strip()
-            # Unquote if quoted
-            if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
-                value_part = value_part[1:-1]
+            # Keep value as-is
 
             entry = NYMLEntry(key=key, quoted_key=False, line=i, indent=indent, raw=raw)
             parent_entries.append(entry)
@@ -166,9 +162,7 @@ def parse_nyml(text: str, *, strict: bool = False, as_entries: bool = False) -> 
                 multiline = {'entry': entry, 'indent': indent, 'raw_lines': []}
                 continue
 
-            # Unquote if quoted
-            if value_part.startswith('"') and value_part.endswith('"') and value_part.count('"') == 2:
-                value_part = value_part[1:-1]
+            # Keep value as-is
 
             # If value_part is empty, it might be an object if following lines are more-indented.
             if value_part == '':

@@ -1,7 +1,7 @@
 """Tests for NYML parser."""
 
 import pytest
-from nyml_parser import parse_nyml, ParseError
+from nyml_parser import parse_nyml, ParseError, to_mapping, get_all
 
 
 def test_basic_key_value():
@@ -32,7 +32,8 @@ def test_quoted_keys():
     """Test quoted keys with special characters."""
     text = '"http://example.com": "URL"'
     result = parse_nyml(text)
-    assert result == {"http://example.com": "URL"}
+    # value should include quotes as part of the string
+    assert result == {"http://example.com": '"URL"'}
 
 
 def test_multiline_string():
@@ -88,15 +89,15 @@ logging:
 
     result = parse_nyml(text)
     expected = {
-        "app_name": "My App",
+        "app_name": '"My App"',
         "version": "1.2",
         "server": {
             "host": "localhost",
             "port": "8080",
-            "status_message": "OK # (production)"
+            "status_message": '"OK # (production)"'
         },
-        "http:routes": "/api/v1",
-        "user:admin": "admin-user",
+        "http:routes": '"/api/v1"',
+        "user:admin": '"admin-user"',
         "welcome_message": "# This is NOT a comment.\n# It is the first line of the string.\n\nThis is the main welcome message.\n\nPlease see the following:\n  * List item 1\n  * List item 2\n    * A nested item\n\nA line with a # is just text.\n",
         "logging": {
             "level": "info"

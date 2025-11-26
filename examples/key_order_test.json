@@ -1,0 +1,9 @@
+{
+  "z_key": "last",
+  "a_key": "first", 
+  "m_key": "middle",
+  "special:key": "colon",
+  "key with spaces": "spaces",
+  "key-with-dashes": "dashes",
+  "key.with.dots": "dots"
+}

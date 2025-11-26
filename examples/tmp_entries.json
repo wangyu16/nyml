@@ -1,0 +1,498 @@
+{
+  "type": "document",
+  "entries": [
+    {
+      "key": "app_name",
+      "value": "MyApp",
+      "line": 5,
+      "indent": 0,
+      "raw": "app_name: MyApp"
+    },
+    {
+      "key": "version",
+      "value": "1.2.3",
+      "line": 6,
+      "indent": 0,
+      "raw": "version: 1.2.3"
+    },
+    {
+      "key": "is_production",
+      "value": "false",
+      "line": 7,
+      "indent": 0,
+      "raw": "is_production: false"
+    },
+    {
+      "key": "quotation",
+      "value": "\"literal\"",
+      "line": 11,
+      "indent": 0,
+      "raw": "quotation: \"literal\""
+    },
+    {
+      "key": "database",
+      "children": [
+        {
+          "key": "host",
+          "value": "localhost",
+          "line": 16,
+          "indent": 2,
+          "raw": "  host: localhost"
+        },
+        {
+          "key": "port",
+          "value": "5432",
+          "line": 17,
+          "indent": 2,
+          "raw": "  port: 5432"
+        },
+        {
+          "key": "name",
+          "value": "myapp_db",
+          "line": 18,
+          "indent": 2,
+          "raw": "  name: myapp_db"
+        },
+        {
+          "key": "credentials",
+          "children": [
+            {
+              "key": "username",
+              "value": "admin",
+              "line": 20,
+              "indent": 4,
+              "raw": "    username: admin"
+            },
+            {
+              "key": "password",
+              "value": "\"secret#password!@#\"",
+              "line": 21,
+              "indent": 4,
+              "raw": "    password: \"secret#password!@#\""
+            },
+            {
+              "key": "backup_password",
+              "children": [],
+              "line": 23,
+              "indent": 4,
+              "raw": "    backup_password:"
+            }
+          ],
+          "line": 19,
+          "indent": 2,
+          "raw": "  credentials:"
+        }
+      ],
+      "line": 14,
+      "indent": 0,
+      "raw": "database:"
+    },
+    {
+      "key": "server",
+      "children": [
+        {
+          "key": "host:port",
+          "value": "\"127.0.0.1:8080\"",
+          "quoted_key": true,
+          "line": 27,
+          "indent": 2,
+          "raw": "  \"host:port\": \"127.0.0.1:8080\""
+        },
+        {
+          "key": "api@version",
+          "value": "\"v2.1\"",
+          "quoted_key": true,
+          "line": 28,
+          "indent": 2,
+          "raw": "  \"api@version\": \"v2.1\""
+        },
+        {
+          "key": "content-type",
+          "value": "\"application/json\"",
+          "quoted_key": true,
+          "line": 29,
+          "indent": 2,
+          "raw": "  \"content-type\": \"application/json\""
+        },
+        {
+          "key": "user agent",
+          "value": "\"MyApp/1.0\"",
+          "quoted_key": true,
+          "line": 30,
+          "indent": 2,
+          "raw": "  \"user agent\": \"MyApp/1.0\""
+        }
+      ],
+      "line": 26,
+      "indent": 0,
+      "raw": "server:"
+    },
+    {
+      "key": "features",
+      "children": [
+        {
+          "key": "authentication",
+          "children": [
+            {
+              "key": "enabled",
+              "value": "true",
+              "line": 35,
+              "indent": 4,
+              "raw": "    enabled: true"
+            },
+            {
+              "key": "providers",
+              "children": [
+                {
+                  "key": "google",
+                  "children": [
+                    {
+                      "key": "client_id",
+                      "value": "\"google-oauth-id\"",
+                      "line": 38,
+                      "indent": 8,
+                      "raw": "        client_id: \"google-oauth-id\""
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "\"google-oauth-secret\"",
+                      "line": 39,
+                      "indent": 8,
+                      "raw": "        client_secret: \"google-oauth-secret\""
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "email\nprofile\n",
+                      "line": 40,
+                      "indent": 8,
+                      "raw": "        scopes: |"
+                    }
+                  ],
+                  "line": 37,
+                  "indent": 6,
+                  "raw": "      google:"
+                },
+                {
+                  "key": "github",
+                  "children": [
+                    {
+                      "key": "client_id",
+                      "value": "github-oauth-id",
+                      "line": 44,
+                      "indent": 8,
+                      "raw": "        client_id: github-oauth-id"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "github-oauth-secret",
+                      "line": 45,
+                      "indent": 8,
+                      "raw": "        client_secret: github-oauth-secret"
+                    }
+                  ],
+                  "line": 43,
+                  "indent": 6,
+                  "raw": "      github:"
+                }
+              ],
+              "line": 36,
+              "indent": 4,
+              "raw": "    providers:"
+            }
+          ],
+          "line": 34,
+          "indent": 2,
+          "raw": "  authentication:"
+        },
+        {
+          "key": "caching",
+          "children": [
+            {
+              "key": "redis",
+              "children": [
+                {
+                  "key": "host",
+                  "value": "redis-server",
+                  "line": 48,
+                  "indent": 6,
+                  "raw": "      host: redis-server"
+                },
+                {
+                  "key": "port",
+                  "value": "6379",
+                  "line": 49,
+                  "indent": 6,
+                  "raw": "      port: 6379"
+                },
+                {
+                  "key": "ttl",
+                  "value": "3600",
+                  "line": 50,
+                  "indent": 6,
+                  "raw": "      ttl: 3600"
+                }
+              ],
+              "line": 47,
+              "indent": 4,
+              "raw": "    redis:"
+            }
+          ],
+          "line": 46,
+          "indent": 2,
+          "raw": "  caching:"
+        }
+      ],
+      "line": 33,
+      "indent": 0,
+      "raw": "features:"
+    },
+    {
+      "key": "messages",
+      "children": [
+        {
+          "key": "welcome",
+          "value": "# This is NOT a comment inside a multiline string\nWelcome to MyApp!\n\nThis multiline message contains:\n* Bullet points\n* Special characters: @#$%^&*()\n* Quotes: \"Hello\" and 'World'\n* Even # symbols that look like comments\n\nEnjoy your stay!\n",
+          "line": 54,
+          "indent": 2,
+          "raw": "  welcome: |"
+        },
+        {
+          "key": "error_template",
+          "value": "An error occurred: {error_message}\n\nPlease try again later or contact support at:\nEmail: support@myapp.com\nPhone: 1-800-HELP-NOW\n",
+          "line": 66,
+          "indent": 2,
+          "raw": "  error_template: |"
+        }
+      ],
+      "line": 53,
+      "indent": 0,
+      "raw": "messages:"
+    },
+    {
+      "key": "entry",
+      "value": "item 1",
+      "line": 75,
+      "indent": 0,
+      "raw": "entry: item 1"
+    },
+    {
+      "key": "entry",
+      "value": "item 2",
+      "line": 76,
+      "indent": 0,
+      "raw": "entry: item 2"
+    },
+    {
+      "key": "entry",
+      "value": "item 3",
+      "line": 77,
+      "indent": 0,
+      "raw": "entry: item 3"
+    },
+    {
+      "key": "edge_cases",
+      "children": [
+        {
+          "key": "empty_multiline",
+          "value": "",
+          "line": 82,
+          "indent": 2,
+          "raw": "  empty_multiline: |"
+        },
+        {
+          "key": "whitespace_only",
+          "value": "# This line has only a comment\n",
+          "line": 85,
+          "indent": 2,
+          "raw": "  whitespace_only: |"
+        },
+        {
+          "key": "special_value",
+          "value": "\"Value with \\\"quotes\\\" and 'single quotes'\"",
+          "line": 89,
+          "indent": 2,
+          "raw": "  special_value: \"Value with \\\"quotes\\\" and 'single quotes'\""
+        },
+        {
+          "key": "path_value",
+          "value": "\"/usr/local/bin/myapp --config=/etc/myapp.conf\"",
+          "line": 90,
+          "indent": 2,
+          "raw": "  path_value: \"/usr/local/bin/myapp --config=/etc/myapp.conf\""
+        },
+        {
+          "key": "url_value",
+          "value": "\"https://api.example.com/v1/users?filter=active&limit=100\"",
+          "line": 91,
+          "indent": 2,
+          "raw": "  url_value: \"https://api.example.com/v1/users?filter=active&limit=100\""
+        },
+        {
+          "key": "key.with.dots",
+          "value": "\"dot value\"",
+          "quoted_key": true,
+          "line": 94,
+          "indent": 2,
+          "raw": "  \"key.with.dots\": \"dot value\""
+        },
+        {
+          "key": "key-with-dashes",
+          "value": "\"dash value\"",
+          "quoted_key": true,
+          "line": 95,
+          "indent": 2,
+          "raw": "  \"key-with-dashes\": \"dash value\""
+        },
+        {
+          "key": "key_with_underscores",
+          "value": "\"underscore value\"",
+          "quoted_key": true,
+          "line": 96,
+          "indent": 2,
+          "raw": "  \"key_with_underscores\": \"underscore value\""
+        },
+        {
+          "key": "123numeric_key",
+          "value": "\"numeric start\"",
+          "quoted_key": true,
+          "line": 97,
+          "indent": 2,
+          "raw": "  \"123numeric_key\": \"numeric start\""
+        },
+        {
+          "key": "key@symbol",
+          "value": "\"at symbol\"",
+          "quoted_key": true,
+          "line": 98,
+          "indent": 2,
+          "raw": "  \"key@symbol\": \"at symbol\""
+        },
+        {
+          "key": "key#hash",
+          "value": "\"hash symbol\"",
+          "quoted_key": true,
+          "line": 99,
+          "indent": 2,
+          "raw": "  \"key#hash\": \"hash symbol\""
+        }
+      ],
+      "line": 80,
+      "indent": 0,
+      "raw": "edge_cases:"
+    },
+    {
+      "key": "deep_nesting",
+      "children": [
+        {
+          "key": "level1",
+          "children": [
+            {
+              "key": "level2",
+              "children": [
+                {
+                  "key": "level3",
+                  "children": [
+                    {
+                      "key": "level4",
+                      "children": [
+                        {
+                          "key": "level5",
+                          "children": [
+                            {
+                              "key": "deepest_value",
+                              "value": "\"Reached the bottom!\"",
+                              "line": 108,
+                              "indent": 12,
+                              "raw": "            deepest_value: \"Reached the bottom!\""
+                            },
+                            {
+                              "key": "another_deep",
+                              "value": "\"Even deeper value\"",
+                              "line": 109,
+                              "indent": 12,
+                              "raw": "            another_deep: \"Even deeper value\""
+                            }
+                          ],
+                          "line": 107,
+                          "indent": 10,
+                          "raw": "          level5:"
+                        }
+                      ],
+                      "line": 106,
+                      "indent": 8,
+                      "raw": "        level4:"
+                    }
+                  ],
+                  "line": 105,
+                  "indent": 6,
+                  "raw": "      level3:"
+                }
+              ],
+              "line": 104,
+              "indent": 4,
+              "raw": "    level2:"
+            }
+          ],
+          "line": 103,
+          "indent": 2,
+          "raw": "  level1:"
+        }
+      ],
+      "line": 102,
+      "indent": 0,
+      "raw": "deep_nesting:"
+    },
+    {
+      "key": "mixed_keys",
+      "children": [
+        {
+          "key": "unquoted_key",
+          "value": "\"normal value\"",
+          "line": 113,
+          "indent": 2,
+          "raw": "  unquoted_key: \"normal value\""
+        },
+        {
+          "key": "quoted:key",
+          "value": "\"special key\"",
+          "quoted_key": true,
+          "line": 114,
+          "indent": 2,
+          "raw": "  \"quoted:key\": \"special key\""
+        },
+        {
+          "key": "another_normal",
+          "value": "\"back to normal\"",
+          "line": 115,
+          "indent": 2,
+          "raw": "  another_normal: \"back to normal\""
+        },
+        {
+          "key": "space key",
+          "value": "\"key with spaces\"",
+          "quoted_key": true,
+          "line": 116,
+          "indent": 2,
+          "raw": "  \"space key\": \"key with spaces\""
+        },
+        {
+          "key": "final_key",
+          "value": "\"end of mixed section\"",
+          "line": 117,
+          "indent": 2,
+          "raw": "  final_key: \"end of mixed section\""
+        }
+      ],
+      "line": 112,
+      "indent": 0,
+      "raw": "mixed_keys:"
+    },
+    {
+      "key": "final_config",
+      "value": "\"This is the end\"",
+      "line": 121,
+      "indent": 0,
+      "raw": "final_config: \"This is the end\""
+    }
+  ]
+}

@@ -6,6 +6,10 @@ app_name: MyApp
 version: 1.2.3
 is_production: false
 
+# Literal value including quotation marks
+
+quotation: "literal"
+
 # Nested configuration
 database:
   # Database connection settings
@@ -65,6 +69,12 @@ messages:
     Please try again later or contact support at:
     Email: support@myapp.com
     Phone: 1-800-HELP-NOW
+
+# Duplicated keys
+
+entry: item 1
+entry: item 2
+entry: item 3
 
 # Edge cases
 edge_cases:

@@ -1,0 +1,6 @@
+# This is a comment
+key: value
+# Another comment
+nested:
+  # Comment inside nesting
+  inner: data

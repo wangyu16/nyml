@@ -1,0 +1,10 @@
+{
+  "number": 42,
+  "float": 3.14159,
+  "boolean": true,
+  "null_value": null,
+  "empty_object": {},
+  "empty_array": [],
+  "special_chars": "Hello\nWorld\tTab",
+  "unicode": "Hello 世界 🌍"
+}

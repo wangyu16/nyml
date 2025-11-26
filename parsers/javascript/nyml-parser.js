@@ -123,10 +123,7 @@ function parseNyml(text, options = {}) {
         throw new ParseError('MISSING_COLON', 'Missing colon after quoted key', i + 1);
       }
       valuePart = rest.slice(1).trim();
-      // Unquote if quoted
-      if (valuePart.startsWith('"') && valuePart.endsWith('"') && (valuePart.match(/"/g) || []).length === 2) {
-        valuePart = valuePart.slice(1, -1);
-      }
+      // Keep value as-is (do not remove surrounding quotes)
     } else {
       const idx = raw.indexOf(':');
       if (idx === -1) {
@@ -134,10 +131,7 @@ function parseNyml(text, options = {}) {
       }
       key = raw.slice(0, idx).trim();
       valuePart = raw.slice(idx + 1).trim();
-      // Unquote if quoted
-      if (valuePart.startsWith('"') && valuePart.endsWith('"') && (valuePart.match(/"/g) || []).length === 2) {
-        valuePart = valuePart.slice(1, -1);
-      }
+      // Keep value as-is (do not remove surrounding quotes)
     }
 
     const entry = { key, quoted_key: stripped.startsWith('"'), line: i + 1, indent, raw };
@@ -148,10 +142,7 @@ function parseNyml(text, options = {}) {
       continue;
     }
 
-    // Unquote if quoted
-    if (valuePart.startsWith('"') && valuePart.endsWith('"') && (valuePart.match(/"/g) || []).length === 2) {
-      valuePart = valuePart.slice(1, -1);
-    }
+    // Keep value as-is
 
     // If valuePart is empty, it might be an object if following lines are more-indented
     if (valuePart === '') {

@@ -1,0 +1,7 @@
+{
+  "name": "test",
+  "items": ["item1", "item2", "item3"],
+  "config": {
+    "tags": ["tag1", "tag2"]
+  }
+}

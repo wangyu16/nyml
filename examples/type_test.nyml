@@ -1,0 +1,11 @@
+number: 42
+float: "3.14159"
+boolean: True
+null_value: None
+empty_object:
+empty_array: |
+special_chars: |
+  Hello
+  World	Tab
+
+unicode: "Hello 世界 🌍"

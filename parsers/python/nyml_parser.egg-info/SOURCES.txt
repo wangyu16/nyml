@@ -1,0 +1,10 @@
+pyproject.toml
+nyml_parser/__init__.py
+nyml_parser/parser.py
+nyml_parser.egg-info/PKG-INFO
+nyml_parser.egg-info/SOURCES.txt
+nyml_parser.egg-info/dependency_links.txt
+nyml_parser.egg-info/requires.txt
+nyml_parser.egg-info/top_level.txt
+tests/test_comprehensive_extra.py
+tests/test_parser.py
