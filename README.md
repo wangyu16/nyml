@@ -230,4 +230,59 @@ When parsed back to JSON:
 
 **Key Ordering:** Object key insertion order is preserved during conversion.
 
+**Duplicates & Order Preservation:** NYML parsers now provide an option to return the parsed document as a sequence of ordered entries that preserves field order and allows duplicate keys. This is especially useful when you want to:
+
+- Keep every occurrence of a repeated key (for example, configuration overlays, multiple settings with same key)
+- Preserve the exact source ordering for roundtrip or audit purposes
+
+The default `parse_nyml()` behavior remains compatible with earlier versions (returns a mapping where the last occurrence wins). Use `as_entries=True` (Python) or `{ asEntries: true }` (JS) to obtain the full ordered entries representation.
+
+### Entries model
+
+The entries model returns a document with the following shape:
+
+```json
+{
+  "type": "document",
+  "entries": [
+    { "key": "a", "value": "1", "line": 1, "indent": 0 },
+    { "key": "a", "value": "2", "line": 2, "indent": 0 },
+    { "key": "b", "children": [{ "key": "c", "value": "3" }] }
+  ]
+}
+```
+
+Each entry includes optional metadata: `quoted_key`, `line`, `indent`, and `raw` (original raw line), plus either `value` or `children` (for nested blocks).
+
+### Helpers & Strategies
+
+To convert the entries representation back into a plain mapping, use `to_mapping()` with a duplicate-resolution strategy:
+
+- `strategy='last'` (default): last occurrence wins
+- `strategy='first'`: first occurrence wins
+- `strategy='all'`: values for duplicated keys are collected into arrays
+
+Examples:
+
+```python
+from nyml_parser import parse_nyml, to_mapping
+doc = parse_nyml(text, as_entries=True)
+print(to_mapping(doc, strategy='last'))
+print(to_mapping(doc, strategy='all'))
+```
+
+```javascript
+const { parseNyml, toMapping } = require("./parsers/javascript/nyml-parser");
+const doc = parseNyml(text, { asEntries: true });
+console.log(toMapping(doc, "last"));
+console.log(toMapping(doc, "all"));
+```
+
+### Migration Note
+
+Existing code that expects `parse_nyml(text)` to return a dictionary will continue to work by default. If you opt into `as_entries`, update your code to either:
+
+- consume the `entries` array directly (recommended for full fidelity), or
+- convert to a mapping using `to_mapping()` with an appropriate duplicate strategy.
+
 **Large Numbers:** Precision is maintained as strings, avoiding floating-point issues.
