@@ -41,9 +41,6 @@ b: 2
 a: 3
 """
 # return ordered entries (document form)
-doc = parse_nyml(text, as_entries=True)
-print(doc['entries'])
-
 # convert to mapping with a strategy (last/first/all)
 map_last = to_mapping(doc, strategy='last')
 map_all = to_mapping(doc, strategy='all')
@@ -51,7 +48,30 @@ print(map_last)  # {'a': '3', 'b': '2'}
 print(map_all)   # {'a': ['1','3'], 'b': ['2']}
 ````
 
-````
+### JavaScript usage (entries)
+
+```javascript
+const { parseNyml, toMapping } = require("./nyml-parser");
+
+const text = `a: 1\nb: 2\na: 3\n`;
+const doc = parseNyml(text, { asEntries: true });
+console.log(doc.entries);
+const lastMap = toMapping(doc, "last");
+const allMap = toMapping(doc, "all");
+console.log(lastMap); // { a: '3', b: '2' }
+console.log(allMap); // { a: ['1','3'], b: ['2'] }
+```
+
+# convert to mapping with a strategy (last/first/all)
+
+map_last = to_mapping(doc, strategy='last')
+map_all = to_mapping(doc, strategy='all')
+print(map_last) # {'a': '3', 'b': '2'}
+print(map_all) # {'a': ['1','3'], 'b': ['2']}
+
+```
+
+```
 
 ### Converting JSON to NYML
 
@@ -63,7 +83,7 @@ import json
 data = {"key": "value", "nested": {"child": "data"}}
 lines = json_to_nyml(data)
 print('\n'.join(lines))
-````
+```
 
 ```javascript
 // JavaScript
