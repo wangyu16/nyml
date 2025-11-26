@@ -102,3 +102,21 @@ console.log(lines.join("\n"));
 - Supports nested objects, comments, quoted keys, and multiline strings
 - Arrays in JSON are converted to multiline strings in NYML
 - Multiline strings in JSON are converted back to `|` syntax in NYML
+
+### CLI Tools
+
+Both the Python and JavaScript parsers are available via command-line utilities located under `examples/`:
+
+Python CLI (uses local Python parser):
+
+```bash
+python examples/nyml_cli.py [--entries] [--strategy last|first|all] [-o OUTPUT] FILE
+```
+
+Node CLI (uses local JS parser):
+
+```bash
+node examples/nyml-cli.js [--entries] [--strategy last|first|all] [-o OUTPUT] FILE
+```
+
+Both utilities can output the ordered entries document (preserving duplicates) with `--entries` or a mapping using `--strategy`.
