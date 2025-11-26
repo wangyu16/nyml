@@ -1,4 +1,4 @@
-const { parseNyml, ParseError } = require('../nyml-parser');
+const { parseNyml, ParseError, toMapping } = require('../nyml-parser');
 
 describe('NYML Parser', () => {
   test('basic key-value parsing', () => {
@@ -113,5 +113,28 @@ logging:
   content`;
     const result = parseNyml(text);
     expect(result).toEqual({ key: 'content\n' });
+  });
+
+  test('entries and duplicates', () => {
+    const text = 'a: 1\nb: 2\na: 3\n';
+    const doc = parseNyml(text, { asEntries: true });
+    expect(doc).toHaveProperty('type', 'document');
+    expect(doc.entries.length).toBe(3);
+    expect(doc.entries[0].key).toBe('a');
+    expect(doc.entries[0].value).toBe('1');
+    expect(doc.entries[1].key).toBe('b');
+    expect(doc.entries[1].value).toBe('2');
+    expect(doc.entries[2].key).toBe('a');
+    expect(doc.entries[2].value).toBe('3');
+  });
+
+  test('toMapping all and last strategies', () => {
+    const text = 'a: 1\na: 2\nb: 3\n';
+    const doc = parseNyml(text, { asEntries: true });
+    const lastMap = toMapping(doc, 'last');
+    expect(lastMap.a).toBe('2');
+    const allMap = toMapping(doc, 'all');
+    expect(Array.isArray(allMap.a)).toBe(true);
+    expect(allMap.a).toEqual(['1', '2']);
   });
 });

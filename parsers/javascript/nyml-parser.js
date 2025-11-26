@@ -41,12 +41,13 @@ function leadingSpaces(s) {
  * @throws {ParseError} If parsing fails
  */
 function parseNyml(text, options = {}) {
-  const { strict = false } = options;
+  const { strict = false, asEntries = false } = options;
 
   const lines = text.split('\n');
-  const root = {};
-  // stack of [obj, indent]
-  const stack = [[root, 0]];
+  // document entries root
+  const rootEntries = [];
+  // stack of [entriesList, indent]
+  const stack = [[rootEntries, 0]];
 
   let multiline = null; // null or { key, indent, rawLines }
 
@@ -76,9 +77,18 @@ function parseNyml(text, options = {}) {
           pieces.push(r.slice(minIndent));
         }
       }
-      const content = pieces.join('\n') + '\n';
-      const parent = stack[stack.length - 1][0];
-      parent[multiline.key] = content;
+      // collapse multiple trailing blank lines into a single one to match previous behavior
+      while (pieces.length >= 2 && pieces[pieces.length - 1] === '' && pieces[pieces.length - 2] === '') {
+        pieces.pop();
+      }
+      let content;
+      if (pieces.length && pieces[pieces.length - 1] === '') {
+        content = pieces.join('\n');
+      } else {
+        content = pieces.join('\n') + '\n';
+      }
+      const entry = multiline.entry;
+      entry.value = content;
       multiline = null;
       // Fall through to process current line as normal
     } else {
@@ -98,7 +108,7 @@ function parseNyml(text, options = {}) {
     while (stack.length > 0 && indent < stack[stack.length - 1][1]) {
       stack.pop();
     }
-    const parent = stack[stack.length - 1][0];
+    const parentEntries = stack[stack.length - 1][0];
 
     // Parse key (handle quoted keys)
     let key, valuePart;
@@ -130,9 +140,11 @@ function parseNyml(text, options = {}) {
       }
     }
 
+    const entry = { key, quoted_key: stripped.startsWith('"'), line: i + 1, indent, raw };
+    parentEntries.push(entry);
     if (valuePart === '|') {
       // Start multiline collection
-      multiline = { key, indent, rawLines: [] };
+      multiline = { entry, indent, rawLines: [] };
       continue;
     }
 
@@ -143,12 +155,10 @@ function parseNyml(text, options = {}) {
 
     // If valuePart is empty, it might be an object if following lines are more-indented
     if (valuePart === '') {
-      // Create nested object and push with its indent (child lines must be more indented)
-      const obj = {};
-      parent[key] = obj;
-      stack.push([obj, indent + 1]);
+      entry.children = [];
+      stack.push([entry.children, indent + 1]);
     } else {
-      parent[key] = valuePart;
+      entry.value = valuePart;
     }
   }
 
@@ -167,16 +177,91 @@ function parseNyml(text, options = {}) {
         pieces.push(r.slice(minIndent));
       }
     }
-    const content = pieces.join('\n') + '\n';
-    const parent = stack[stack.length - 1][0];
-    parent[multiline.key] = content;
+    while (pieces.length >= 2 && pieces[pieces.length - 1] === '' && pieces[pieces.length - 2] === '') {
+      pieces.pop();
+    }
+    let content;
+    if (pieces.length && pieces[pieces.length - 1] === '') {
+      content = pieces.join('\n');
+    } else {
+      content = pieces.join('\n') + '\n';
+    }
+    const entry = multiline.entry;
+    entry.value = content;
     multiline = null;
   }
 
-  return root;
+  // If asEntries is requested, return the structured document
+  if (asEntries) {
+    return { type: 'document', entries: rootEntries };
+  }
+
+  // Otherwise produce mapping (last-write wins)
+  function entriesToMapping(entries) {
+    const result = {};
+    for (const e of entries) {
+      let value;
+      if (e.children) {
+        value = entriesToMapping(e.children);
+      } else {
+        value = e.value == null ? '' : e.value;
+      }
+      result[e.key] = value;
+    }
+    return result;
+  }
+
+  return entriesToMapping(rootEntries);
+}
+
+function toMapping(document, strategy = 'last') {
+  let entries = document;
+  if (document && document.type === 'document') entries = document.entries;
+  const result = {};
+  function valueFromEntry(e) {
+    if (e.children) return toMapping({ type: 'document', entries: e.children }, strategy);
+    return e.value == null ? '' : e.value;
+  }
+  for (const e of entries) {
+    const key = e.key;
+    const val = valueFromEntry(e);
+    if (strategy === 'all') {
+      if (!result[key]) result[key] = [];
+      result[key].push(val);
+    } else if (strategy === 'first') {
+      if (!(key in result)) result[key] = val;
+    } else {
+      result[key] = val;
+    }
+  }
+  return result;
+}
+
+function getAll(document, key) {
+  let entries = document;
+  if (document && document.type === 'document') entries = document.entries;
+  const out = [];
+  for (const e of entries) {
+    if (e.key === key) out.push(e.value == null ? '' : e.value);
+  }
+  return out;
+}
+
+function getFirst(document, key) {
+  const vals = getAll(document, key);
+  return vals[0] === undefined ? null : vals[0];
+}
+
+function getLast(document, key) {
+  const vals = getAll(document, key);
+  return vals.length ? vals[vals.length - 1] : null;
 }
 
 module.exports = {
   parseNyml,
-  ParseError
+  ParseError,
+  toMapping,
+  getAll,
+  getFirst,
+  getLast
 };
