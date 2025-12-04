@@ -1,0 +1,41 @@
+# Comprehensive NYML V2 Test File
+# This file tests all V2 features
+
+name: Alice
+age: 25
+duplicate: first
+duplicate: second
+
+items:
+  value1
+  value2
+  child: a
+  child: b
+  another plain value
+
+nested:
+  level2:
+    deep1
+    deep2
+    key: value
+
+multiline: |
+  # This is a heading
+  Line 1
+  
+  Line 2 with indent:
+    indented content
+
+"quoted:key": special value
+key with spaces: another value
+
+single:
+  only-one
+
+config:
+  database:
+    host: localhost
+    port: 5432
+  features:
+    auth: enabled
+    cache: disabled
